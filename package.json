@@ -1,17 +1,25 @@
 {
   "name": "wpp-bot",
   "version": "1.0.0",
+  "description": "WhatsApp bot powered by whatsapp-web.js and Puppeteer",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "postinstall": "apt-get update && apt-get install -y libnss3 libatk1.0-0 libatk-bridge2.0-0 libxcomposite1 libxrandr2 libxdamage1 libasound2 libpangocairo-1.0-0 libatspi2.0-0 libgtk-3-0"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "whatsapp",
+    "bot",
+    "puppeteer",
+    "express"
+  ],
+  "author": "TuNombre",
   "license": "ISC",
-  "description": "",
   "dependencies": {
     "express": "^4.21.2",
     "puppeteer": "^24.1.0",
+    "qrcode": "^1.5.4",
     "whatsapp-web.js": "^1.26.0"
   },
   "devDependencies": {

@@ -7,7 +7,7 @@ let qrCode = null; // Variable para almacenar el QR
 // Configuración del cliente de WhatsApp
 const client = new Client({
     puppeteer: {
-        executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome', // Ruta al ejecutable de Chrome en macOS
+        args: ['--no-sandbox', '--disable-setuid-sandbox'], // Configuración necesaria para Puppeteer en entornos Linux
     },
 });
 
@@ -29,22 +29,35 @@ client.on('message', (msg) => {
     }
 });
 
+client.on('auth_failure', (message) => {
+    console.error('Authentication failure:', message);
+});
+
+client.on('disconnected', (reason) => {
+    console.log('Client was logged out:', reason);
+});
+
 // Inicializa el cliente de WhatsApp
 client.initialize();
 
 // Ruta para mostrar el QR en el navegador
-app.get('/qr', (req, res) => {
+const QRCode = require('qrcode');
+
+// Ruta para mostrar el QR en el navegador
+app.get('/qr', async (req, res) => {
     if (qrCode) {
+        const qrImage = await QRCode.toDataURL(qrCode);
         res.send(`
             <div style="text-align: center;">
                 <h1>Escanea este código QR con tu WhatsApp</h1>
-                <img src="https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(qrCode)}&size=200x200" />
+                <img src="${qrImage}" />
             </div>
         `);
     } else {
         res.send('<h1>Cliente ya listo o QR no disponible.</h1>');
     }
 });
+
 
 // Ruta principal
 app.get('/', (req, res) => {
