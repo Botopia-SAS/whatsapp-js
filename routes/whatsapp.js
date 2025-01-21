@@ -7,8 +7,16 @@ const clients = {}; // Almacena instancias de WhatsApp para cada usuario
 
 // Función para inicializar un cliente de WhatsApp
 const initializeClient = async (userId, user) => {
+    console.log(`Inicializando cliente para usuario: ${userId}`);
+    console.log('Verificando inicialización del cliente para:', userId);
+    if (!clients[userId]) {
+        console.log('Inicializando cliente...');
+        await initializeClient(userId, user);
+    }
+
     const client = new Client({
         puppeteer: {
+            headless: true, // Ejecutar en modo headless
             args: ['--no-sandbox', '--disable-setuid-sandbox'], // Configuración necesaria para Puppeteer en entornos Linux
         },
         session: user.session, // Cargar sesión del usuario desde MongoDB
