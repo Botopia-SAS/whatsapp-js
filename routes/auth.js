@@ -45,7 +45,9 @@ router.post(
 
             // Generar un token de verificación
             const token = generateToken({ email }, '1d'); // Expira en 1 día
-            const verificationLink = `http://localhost:3000/auth/verify?token=${token}`;
+            const APP_BASE_URL = process.env.APP_BASE_URL || 'http://localhost:3000'; // Fallback si no está definida
+
+            const verificationLink = `${APP_BASE_URL}/auth/verify?token=${token}`;
 
             // Enviar correo de verificación
             await sendEmail(
