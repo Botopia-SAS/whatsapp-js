@@ -9,7 +9,7 @@ connectDB();
 
 // Configura CORS
 app.use(cors({
-    origin: 'http://localhost:3001', // Reemplaza con la URL de tu frontend
+    origin: 'https://frontend-whatsapp-bot.vercel.app/', // Reemplaza con la URL de tu frontend
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
 }));
