@@ -7,12 +7,13 @@ const clients = {}; // Almacena instancias de WhatsApp para cada usuario
 
 // Función para inicializar un cliente de WhatsApp
 const initializeClient = async (userId, user) => {
-    console.log(`Inicializando cliente para usuario: ${userId}`);
-    console.log('Verificando inicialización del cliente para:', userId);
-    if (!clients[userId]) {
-        console.log('Inicializando cliente...');
-        await initializeClient(userId, user);
+    // Verifica si ya existe un cliente para el usuario
+    if (clients[userId]) {
+        console.log(`Cliente ya inicializado para el usuario: ${userId}`);
+        return clients[userId];
     }
+
+    console.log(`Inicializando cliente para usuario: ${userId}`);
 
     const client = new Client({
         puppeteer: {
@@ -51,8 +52,10 @@ const initializeClient = async (userId, user) => {
     });
 
     client.initialize();
+    clients[userId] = { client }; // Guardar el cliente en la lista
     return client;
 };
+
 
 // Ruta para generar y manejar códigos QR
 router.get('/:userId/qr', async (req, res) => {
