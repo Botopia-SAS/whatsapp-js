@@ -23,10 +23,10 @@
     "express": "^4.21.2",
     "express-validator": "^7.2.1",
     "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.9.5",
     "nodemailer": "^6.9.16",
     "puppeteer": "^24.1.0",
     "qrcode": "^1.5.4",
-    "mongoose": "^6.0.0",
     "whatsapp-web.js": "^1.26.0"
   },
   "devDependencies": {
