@@ -17,6 +17,7 @@ const initializeClient = async (userId, user) => {
 
     const client = new Client({
         puppeteer: {
+            executablePath: '/usr/bin/chromium', // Ruta del binario instalado
             headless: true, // Ejecutar en modo headless
             args: ['--no-sandbox', '--disable-setuid-sandbox'], // Configuración necesaria para Puppeteer en entornos Linux
         },
@@ -46,6 +47,7 @@ const initializeClient = async (userId, user) => {
 
     client.on('message', (msg) => {
         console.log(`Mensaje recibido de ${userId}: ${msg.body}`);
+        console.log('Verificando si el mensaje es "!ping"');
         if (msg.body === '!ping') {
             msg.reply('pong');
         }
