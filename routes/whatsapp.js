@@ -1,3 +1,4 @@
+const OpenAI = require('openai');
 const express = require('express');
 const { Client } = require('whatsapp-web.js');
 const User = require('../models/user'); // Modelo de usuario en MongoDB
@@ -45,13 +46,36 @@ const initializeClient = async (userId, user) => {
         delete clients[userId]; // Limpiar el cliente desconectado
     });
 
-    client.on('message', (msg) => {
+
+
+    const openai = new OpenAI({
+        apiKey: process.env.OPENAI_API_KEY, // Asegúrate de que esta variable esté configurada correctamente
+    });
+
+    client.on('message', async (msg) => {
         console.log(`Mensaje recibido de ${userId}: ${msg.body}`);
-        console.log('Verificando si el mensaje es "!ping"');
-        if (msg.body === '!ping') {
-            msg.reply('pong');
+
+        try {
+            // Llama al endpoint de chat completions
+            const response = await openai.chat.completions.create({
+                model: 'gpt-3.5-turbo', // Usa el modelo correcto
+                messages: [{ role: 'user', content: msg.body }],
+            });
+
+            // Obtén la respuesta del asistente
+            const reply = response.choices[0].message.content;
+
+            // Envía la respuesta al usuario en WhatsApp
+            await msg.reply(reply);
+            console.log(`Respuesta enviada a ${userId}: ${reply}`);
+        } catch (error) {
+            console.error(`Error al procesar el mensaje para ${userId}:`, error);
+            await msg.reply(
+                'Lo siento, ocurrió un error al procesar tu mensaje. Intenta de nuevo más tarde.'
+            );
         }
     });
+
 
     client.initialize();
     clients[userId] = { client }; // Guardar el cliente en la lista
